@@ -8,6 +8,7 @@ import HowItWorks from './components/HowItWorks/HowItWorks';
 import AboutUs from './components/AboutUs/AboutUs';
 import FAQ from './components/FAQ/FAQ';
 import Contact from './components/Contact/Contact';
+import Cotizador from './components/Cotizador/Cotizador';
 import Footer from './components/Footer/Footer';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <AboutUs />
         <FAQ />
         <Contact />
+        <Cotizador />
       </main>
       <Footer />
     </div>

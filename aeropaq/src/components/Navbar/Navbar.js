@@ -44,6 +44,11 @@ const Navbar = () => {
               Contacto
             </a>
           </li>
+          <li className="nav-item">
+            <a href="#cotizador" className="nav-links">
+              Cotizador
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
