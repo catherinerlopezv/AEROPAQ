@@ -42,3 +42,14 @@
   margin-bottom: 8px;
 }
 
+@media screen and (max-width: 768px) {
+  .about-us-section {
+    padding: 60px 20px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+}
+

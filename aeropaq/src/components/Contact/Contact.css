@@ -73,3 +73,13 @@ button[type="submit"]:hover:not(:disabled) {
   font-size: 1.1rem;
   color: #28a745;
 }
+
+@media screen and (max-width: 768px) {
+  .contact-section {
+    padding: 60px 20px;
+  }
+
+  .contact-section h2 {
+    font-size: 2rem;
+  }
+}
