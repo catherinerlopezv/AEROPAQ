@@ -3,10 +3,10 @@ import './Contact.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
+    nombre: '',
+    correo: '',
+    telefono: '',
+    mensaje: ''
   });
 
   const [errors, setErrors] = useState({});
@@ -23,18 +23,18 @@ const Contact = () => {
 
   const validate = () => {
     let tempErrors = {};
-    if (!formData.name) tempErrors.name = 'El nombre es requerido.';
-    if (!formData.email) {
-      tempErrors.email = 'El correo electrónico es requerido.';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      tempErrors.email = 'El correo electrónico no es válido.';
+    if (!formData.nombre) tempErrors.nombre = 'El nombre es requerido.';
+    if (!formData.correo) {
+      tempErrors.correo = 'El correo electrónico es requerido.';
+    } else if (!/\S+@\S+\.\S+/.test(formData.correo)) {
+      tempErrors.correo = 'El correo electrónico no es válido.';
     }
-    if (!formData.phone) {
-      tempErrors.phone = 'El teléfono es requerido.';
-    } else if (!/^\d{8}$/.test(formData.phone)) {
-      tempErrors.phone = 'El teléfono debe tener 10 dígitos.';
+    if (!formData.telefono) {
+      tempErrors.telefono = 'El teléfono es requerido.';
+    } else if (!/^\d{8,10}$/.test(formData.telefono)) { // Ajustado para 8 a 10 dígitos
+      tempErrors.telefono = 'El teléfono debe tener entre 8 y 10 dígitos.';
     }
-    if (!formData.message) tempErrors.message = 'El mensaje es requerido.';
+    if (!formData.mensaje) tempErrors.mensaje = 'El mensaje es requerido.';
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -45,14 +45,37 @@ const Contact = () => {
       setIsSubmitting(true);
       setSubmitMessage('');
 
-   
+      // --- INICIO DE LA LÓGICA DE ENVÍO A GOOGLE SHEETS ---
       
-      // Simulación de envío
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Form data submitted:', formData);
-      setSubmitMessage('¡Gracias por tu mensaje! (Simulación exitosa).');
-      setFormData({ name: '', email: '', phone: '', message: '' });
-      setIsSubmitting(false);
+      // ▼▼▼ PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ▼▼▼
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbzY0huRFu8UW1lT9Urar39rn_owJbEvr2TuJYD6CT0r4UxEL9oOouQrzpYTH_reU1kqsw/exec'; 
+      // ▲▲▲ PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ▲▲▲
+
+      try {
+        const response = await fetch(scriptURL, {
+          method: 'POST',
+          body: JSON.stringify(formData),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const result = await response.json();
+
+        if (result.result === 'success') {
+          setSubmitMessage('¡Gracias por tu mensaje! Ha sido enviado correctamente.');
+          setFormData({ nombre: '', correo: '', telefono: '', mensaje: '' });
+        } else {
+          throw new Error(result.error || 'Ocurrió un error al enviar el formulario.');
+        }
+
+      } catch (error) {
+        console.error('Error!', error.message);
+        setSubmitMessage('Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+      } finally {
+        setIsSubmitting(false);
+      }
+      // --- FIN DE LA LÓGICA DE ENVÍO ---
     }
   };
 
@@ -62,47 +85,47 @@ const Contact = () => {
         <h2>Contacto</h2>
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="name">Nombre</label>
+            <label htmlFor="nombre">Nombre</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={formData.name}
+              id="nombre"
+              name="nombre"
+              value={formData.nombre}
               onChange={handleChange}
             />
-            {errors.name && <p className="error-text">{errors.name}</p>}
+            {errors.nombre && <p className="error-text">{errors.nombre}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="email">Correo Electrónico</label>
+            <label htmlFor="correo">Correo Electrónico</label>
             <input
               type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              id="correo"
+              name="correo"
+              value={formData.correo}
               onChange={handleChange}
             />
-            {errors.email && <p className="error-text">{errors.email}</p>}
+            {errors.correo && <p className="error-text">{errors.correo}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="phone">Teléfono</label>
+            <label htmlFor="telefono">Teléfono</label>
             <input
               type="tel"
-              id="phone"
-              name="phone"
-              value={formData.phone}
+              id="telefono"
+              name="telefono"
+              value={formData.telefono}
               onChange={handleChange}
             />
-            {errors.phone && <p className="error-text">{errors.phone}</p>}
+            {errors.telefono && <p className="error-text">{errors.telefono}</p>}
           </div>
           <div className="form-group">
-            <label htmlFor="message">Mensaje</label>
+            <label htmlFor="mensaje">Mensaje</label>
             <textarea
-              id="message"
-              name="message"
-              value={formData.message}
+              id="mensaje"
+              name="mensaje"
+              value={formData.mensaje}
               onChange={handleChange}
             ></textarea>
-            {errors.message && <p className="error-text">{errors.message}</p>}
+            {errors.mensaje && <p className="error-text">{errors.mensaje}</p>}
           </div>
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? 'Enviando...' : 'Enviar'}
