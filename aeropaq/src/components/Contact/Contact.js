@@ -31,8 +31,8 @@ const Contact = () => {
     }
     if (!formData.telefono) {
       tempErrors.telefono = 'El teléfono es requerido.';
-    } else if (!/^\d{8,10}$/.test(formData.telefono)) { // Ajustado para 8 a 10 dígitos
-      tempErrors.telefono = 'El teléfono debe tener entre 8 y 10 dígitos.';
+    } else if (!/^\d{8,15}$/.test(formData.telefono)) { 
+      tempErrors.telefono = 'El teléfono debe tener entre 8 y 15 dígitos.';
     }
     if (!formData.mensaje) tempErrors.mensaje = 'El mensaje es requerido.';
     setErrors(tempErrors);
@@ -40,44 +40,40 @@ const Contact = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validate()) {
-      setIsSubmitting(true);
-      setSubmitMessage('');
+  e.preventDefault();
 
-      // --- INICIO DE LA LÓGICA DE ENVÍO A GOOGLE SHEETS ---
-      
-      // ▼▼▼ PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ▼▼▼
-      const scriptURL = 'https://script.google.com/macros/s/AKfycbzY0huRFu8UW1lT9Urar39rn_owJbEvr2TuJYD6CT0r4UxEL9oOouQrzpYTH_reU1kqsw/exec'; 
-      // ▲▲▲ PEGA TU URL DE GOOGLE APPS SCRIPT AQUÍ ▲▲▲
+  if (validate()) {
+    setIsSubmitting(true);
+    setSubmitMessage('');
 
-      try {
-        const response = await fetch(scriptURL, {
-          method: 'POST',
-          body: JSON.stringify(formData),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        const result = await response.json();
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbxL2Woq1sDSG1fcNbi9FP4uCtllMaS5G_Kbrf_EjYf3Eko1_i_g9fEVafz_9Qo5JMxivg/exec';
 
-        if (result.result === 'success') {
-          setSubmitMessage('¡Gracias por tu mensaje! Ha sido enviado correctamente.');
-          setFormData({ nombre: '', correo: '', telefono: '', mensaje: '' });
-        } else {
-          throw new Error(result.error || 'Ocurrió un error al enviar el formulario.');
-        }
+    try {
+      await fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
 
-      } catch (error) {
-        console.error('Error!', error.message);
-        setSubmitMessage('Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.');
-      } finally {
-        setIsSubmitting(false);
-      }
-      // --- FIN DE LA LÓGICA DE ENVÍO ---
+      setSubmitMessage('¡Gracias por tu mensaje! Lo hemos recibido correctamente.');
+      setFormData({
+        nombre: '',
+        correo: '',
+        telefono: '',
+        mensaje: ''
+      });
+
+    } catch (error) {
+      console.error('Error al enviar el formulario:', error);
+      setSubmitMessage('Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.');
+    } finally {
+      setIsSubmitting(false);
     }
-  };
+  }
+};
 
   return (
     <section id="contact" className="contact-section">
