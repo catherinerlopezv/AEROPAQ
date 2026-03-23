@@ -2,31 +2,43 @@ import React from 'react';
 import './HowItWorks.css';
 
 const HowItWorks = () => {
+  const stepsList = [
+    {
+      title: 'Solicitud',
+      description: 'Realiza tu solicitud de envío a través de nuestra plataforma en línea.',
+      icon: 'fas fa-file-alt',
+    },
+    {
+      title: 'Recolección',
+      description: 'Nuestro equipo recoge el paquete en la dirección que nos indiques.',
+      icon: 'fas fa-box',
+    },
+    {
+      title: 'Despacho',
+      description: 'Clasificamos y despachamos tu paquete a su destino.',
+      icon: 'fas fa-shipping-fast',
+    },
+    {
+      title: 'Entrega',
+      description: 'Entregamos tu paquete de forma segura y a tiempo en su destino final.',
+      icon: 'fas fa-check-circle',
+    },
+  ];
+
   return (
     <section id="how-it-works" className="how-it-works-section">
       <div className="container">
         <h2>Cómo Funciona</h2>
         <div className="steps">
-          <div className="step">
-            <div className="step-icon">1</div>
-            <h3>Solicitud</h3>
-            <p>Realiza tu solicitud de envío a través de nuestra plataforma en línea.</p>
-          </div>
-          <div className="step">
-            <div className="step-icon">2</div>
-            <h3>Recolección</h3>
-            <p>Nuestro equipo recoge el paquete en la dirección que nos indiques.</p>
-          </div>
-          <div className="step">
-            <div className="step-icon">3</div>
-            <h3>Despacho</h3>
-            <p>Clasificamos y despachamos tu paquete a su destino.</p>
-          </div>
-          <div className="step">
-            <div className="step-icon">4</div>
-            <h3>Entrega</h3>
-            <p>Entregamos tu paquete de forma segura y a tiempo en su destino final.</p>
-          </div>
+          {stepsList.map((step, index) => (
+            <div key={index} className="step">
+              <div className="step-icon">
+                <i className={step.icon}></i>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

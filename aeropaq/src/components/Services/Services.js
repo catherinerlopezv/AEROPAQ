@@ -6,18 +6,22 @@ const Services = () => {
     {
       title: 'Envíos Nacionales',
       description: 'Cobertura completa en todo el país, garantizando que tus paquetes lleguen a tiempo y de forma segura.',
+      icon: 'fas fa-truck',
     },
     {
       title: 'Envíos Internacionales',
       description: 'Conectamos tu negocio con el mundo, con opciones de envío aéreo y marítimo a los principales destinos.',
+      icon: 'fas fa-globe-americas',
     },
     {
       title: 'Recolección a Domicilio',
       description: 'Para tu máxima comodidad, programamos la recolección de tus paquetes directamente en tu hogar u oficina.',
+      icon: 'fas fa-box-open',
     },
     {
       title: 'Servicio Exprés',
       description: 'Para tus envíos más urgentes, ofrecemos entrega garantizada en el menor tiempo posible a nivel nacional.',
+      icon: 'fas fa-rocket',
     },
   ];
 
@@ -28,6 +32,9 @@ const Services = () => {
         <div className="services-wrapper">
           {servicesList.map((service, index) => (
             <div key={index} className="service-card">
+              <div className="service-icon">
+                <i className={service.icon}></i>
+              </div>
               <h3>{service.title}</h3>
               <p>{service.description}</p>
             </div>
