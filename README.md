@@ -22,7 +22,7 @@ El sitio permite mostrar información de servicios, cobertura, contacto y un cot
 
 ## Cómo ejecutar el proyecto
 
-Sigue estos pasos para correr el proyecto en tu entorno local:
+Sigue estos pasos para correr el proyecto en tu entorno local(rama: dev_cl):
 
 ### 1. Clonar el repositorio
 
