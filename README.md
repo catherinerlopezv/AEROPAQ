@@ -75,5 +75,29 @@ http://localhost:3000
 * Puede escalarse en el futuro con más funcionalidades como autenticación, tracking en tiempo real y backend.
 
 ---
+## Decisiones técnicas relevantes
+
+  1. Arquitectura basada en componentes (Component-Based Architecture)
+  2. Separación por funcionalidades (Feature-based structure)
+
+      Los componentes están organizados por propósito y no por tipo técnico:
+      
+      Ejemplo:
+      
+      Navbar, Footer → componentes globales
+      
+      Coverage, Cotizador → lógica específica del negocio
+  3. Uso de componentes reutilizables globales
+  
+  Se definieron componentes que probablemente se reutilizan en toda la app:
+  
+  Navbar
+  
+  Footer
+  4. Estructura orientada a SPA (Single Page Application)
+  
+*Se implementó una arquitectura basada en componentes en React, organizando la aplicación por funcionalidades. Se definieron componentes reutilizables como Navbar y Footer, y vistas independientes como Home, Contact y Services, integradas mediante un sistema de rutas en una SPA. Además, se encapsuló la lógica de negocio en componentes específicos y se separaron los estilos mediante CSS, facilitando la escalabilidad y mantenibilidad del sistema.
+
+---
 
 [1]: https://blog.openreplay.com/es/entender-package-json-corazon-nodejs/?utm_source=chatgpt.com "Entendiendo package.json: El Corazón de Todo Proyecto Node.js"
