@@ -6,6 +6,7 @@ const Contact = () => {
     nombre: '',
     correo: '',
     telefono: '',
+    asunto: '',
     mensaje: ''
   });
 
@@ -31,49 +32,53 @@ const Contact = () => {
     }
     if (!formData.telefono) {
       tempErrors.telefono = 'El teléfono es requerido.';
-    } else if (!/^\d{8,15}$/.test(formData.telefono)) { 
+    } else if (!/^\d{8,15}$/.test(formData.telefono)) {
       tempErrors.telefono = 'El teléfono debe tener entre 8 y 15 dígitos.';
     }
+    if (!formData.asunto) tempErrors.asunto = 'El asunto es requerido.';
     if (!formData.mensaje) tempErrors.mensaje = 'El mensaje es requerido.';
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  if (validate()) {
-    setIsSubmitting(true);
-    setSubmitMessage('');
+    if (validate()) {
+      setIsSubmitting(true);
+      setSubmitMessage('');
 
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxL2Woq1sDSG1fcNbi9FP4uCtllMaS5G_Kbrf_EjYf3Eko1_i_g9fEVafz_9Qo5JMxivg/exec';
+      try {
+        const response = await fetch('/api/contactos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
 
-    try {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
+        const result = await response.json();
 
-      setSubmitMessage('¡Gracias por tu mensaje! Lo hemos recibido correctamente.');
-      setFormData({
-        nombre: '',
-        correo: '',
-        telefono: '',
-        mensaje: ''
-      });
-
-    } catch (error) {
-      console.error('Error al enviar el formulario:', error);
-      setSubmitMessage('Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.');
-    } finally {
-      setIsSubmitting(false);
+        if (response.ok) {
+          setSubmitMessage('¡Gracias por tu mensaje! Lo hemos recibido correctamente.');
+          setFormData({
+            nombre: '',
+            correo: '',
+            telefono: '',
+            asunto: '',
+            mensaje: ''
+          });
+        } else {
+          setSubmitMessage(result.msg || 'Hubo un problema al enviar tu mensaje. Inténtalo de nuevo.');
+        }
+      } catch (error) {
+        console.error('Error al enviar el formulario:', error);
+        setSubmitMessage('Hubo un problema al conectar con el servidor. Inténtalo de nuevo más tarde.');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
-  }
-};
+  };
 
   return (
     <section id="contact" className="contact-section">
@@ -112,6 +117,17 @@ const Contact = () => {
               onChange={handleChange}
             />
             {errors.telefono && <p className="error-text">{errors.telefono}</p>}
+          </div>
+          <div className="form-group">
+            <label htmlFor="asunto">Asunto</label>
+            <input
+              type="text"
+              id="asunto"
+              name="asunto"
+              value={formData.asunto}
+              onChange={handleChange}
+            />
+            {errors.asunto && <p className="error-text">{errors.asunto}</p>}
           </div>
           <div className="form-group">
             <label htmlFor="mensaje">Mensaje</label>
